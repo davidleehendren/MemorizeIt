@@ -14,11 +14,10 @@ import SwiftUI
 //I need an OnStart function to set some parameters, I think. Then I wouldn't have to set parsedText = memorizeText in every function. Not a high priority though.
 //The TextField view doesn't support multi-line entry, so your text leaves the screen if its longer than a couple sentences. I've gotten around this by duplicating it in the Text view directly below for now.
 
-
 struct ContentView: View {
     //Variables
     @State var memorizeText = "Let the peace of Christ rule in your hearts, to which you were called in one body; and be thankful."
-    @State var parsedText = ""
+    @State var parsedText = "[click button]"
     @State var spaceSplit: [Substring] = [""]
     @State var pctOfLetters = 50.0
     let blankChar: Character = Character("-")
@@ -110,9 +109,11 @@ struct ContentView: View {
                 VStack{
                     //display parsed text
                     Text("Updated text below:")
+                        .fontWeight(.bold)
                     Text(parsedText)
                     Text("******************")
                     Text("Test auto-display instead of button-driven:")
+                        .fontWeight(.bold)
                         .padding(.top, 10.0)
                     Text(blankRandomWords(memorizeText, pctOfLetters))
                     Spacer()
