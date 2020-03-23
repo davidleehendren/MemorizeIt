@@ -20,7 +20,10 @@ struct ContentView: View {
     @State var parsedText = "[click button]"
     @State var spaceSplit: [Substring] = [""]
     @State var pctOfLetters = 50.0
-    let blankChar: Character = Character("-")
+    @State var blankChar: Character = Character("-")
+    @State var test = ""
+    @State var wordInc = 0
+    
     let maroon = Color(red: 128.0/255.0, green: 0.0/255.0, blue: 0.0/255.0)
     let gold = Color(red: 255.0/255.0, green: 215.0/255.0, blue: 0.0/255.0)
     @State private var toggleText = true
@@ -38,7 +41,6 @@ struct ContentView: View {
                     TextField("Default text", text: $memorizeText) //,onCommit: {parsedText = memorizeText}
                         .lineLimit(nil) //this annoyingly does not work..
                         .foregroundColor(Color.white)
-                    
                     VStack{
                         Text("Full text to memorize:")
                             .foregroundColor(gold)
@@ -116,6 +118,21 @@ struct ContentView: View {
                         .fontWeight(.bold)
                         .padding(.top, 10.0)
                     Text(blankRandomWords(memorizeText, pctOfLetters))
+                    //test a button that displays a word from the first string you can increment through.
+                    Button("Cycle through words"){
+                        self.spaceSplit = self.splitOnSpaces(self.memorizeText)
+                        self.test = String(self.spaceSplit[self.wordInc])
+                        if self.wordInc < self.spaceSplit.count-1 {
+                          self.wordInc += 1
+                        } else {self.wordInc = 0}
+                    }
+                    .frame(width: 200, height: 50, alignment: .center)
+                    .background(Color.white)
+                    .clipShape(Capsule())
+                    .overlay(Capsule().stroke(Color.black, lineWidth: 1))
+                    .foregroundColor(Color.blue)
+
+                    Text(test)
                     Spacer()
                     Toggle(isOn: $toggleText) {
                         Text("Hide original text")
@@ -128,6 +145,9 @@ struct ContentView: View {
         }
         
     }
+    
+    
+    
     
     //Functions start here
     
@@ -206,14 +226,14 @@ struct ContentView: View {
             let removalIndex = Int.random(in: 0..<textToParseArray.count)
             //print("\(textToParseArray[removalIndex]) needs to be removed")
             //if word is already blank, skip and get a new random word
-            if String((textToParseArray[removalIndex]).filter {$0 == "-"}).count == String((textToParseArray[removalIndex])).count { //word is already blanked, continue
+            if String((textToParseArray[removalIndex]).filter {$0 == blankChar}).count == String((textToParseArray[removalIndex])).count { //word is already blanked, continue
                 continue
             }
             //if word isn't blank, blank it out
             else {
                 //for each character in string at random index in array, create a "-" char in new string. *Need to replace "-" with blankChar in app!
                 for _ in textToParseArray[removalIndex] {
-                    wordBlanked += "-"
+                    wordBlanked += String(blankChar)
                 }
                 //replace original value in array with new, blanked value of same length.
                 textToParseArray[removalIndex] = Substring(wordBlanked) //replace old value with blanks string in array
