@@ -14,6 +14,25 @@ import SwiftUI
 //I need an OnStart function to set some parameters, I think. Then I wouldn't have to set parsedText = memorizeText in every function. Not a high priority though.
 //The TextField view doesn't support multi-line entry, so your text leaves the screen if its longer than a couple sentences. I've gotten around this by duplicating it in the Text view directly below for now.
 
+//formatting collections ******************
+extension View {
+    func buttons() -> some View {
+        self.modifier(ButtonStyle())
+    }
+}
+
+struct ButtonStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+        .frame(width: 200, height: 50, alignment: .center)
+        .background(Color.white)
+        .clipShape(Capsule())
+        .overlay(Capsule().stroke(Color.black, lineWidth: 1))
+        .foregroundColor(Color.blue)
+    }
+}
+
+//start View and Main Code ****************
 struct ContentView: View {
     //Variables
     @State var memorizeText = "Let the peace of Christ rule in your hearts, to which you were called in one body; and be thankful."
@@ -21,7 +40,7 @@ struct ContentView: View {
     @State var spaceSplit: [Substring] = [""]
     @State var pctOfLetters = 50.0
     @State var blankChar: Character = Character("-")
-    @State var test = ""
+    @State var wordCycle = ""
     @State var wordInc = 0
     
     let maroon = Color(red: 128.0/255.0, green: 0.0/255.0, blue: 0.0/255.0)
@@ -30,118 +49,110 @@ struct ContentView: View {
     
     //Main View
     var body: some View {
-        ZStack{
-            LinearGradient(gradient: Gradient(colors: [maroon, .black]), startPoint: .top, endPoint: .bottom)
-                .edgesIgnoringSafeArea(.all)
-            VStack{
-                VStack {
-                    Text("Enter your text below:")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                    TextField("Default text", text: $memorizeText) //,onCommit: {parsedText = memorizeText}
-                        .lineLimit(nil) //this annoyingly does not work..
-                        .foregroundColor(Color.white)
-                    VStack{
-                        Text("Full text to memorize:")
-                            .foregroundColor(gold)
-                        if toggleText {
-                            Text(memorizeText)
+        NavigationView {
+            ZStack{
+                LinearGradient(gradient: Gradient(colors: [maroon, .black]), startPoint: .top, endPoint: .bottom)
+                    .edgesIgnoringSafeArea(.all)
+                VStack{
+                    VStack {
+                        Text("Enter your text below:")
+                            .font(.headline)
+                            .fontWeight(.bold)
+                        TextField("Default text", text: $memorizeText) //,onCommit: {parsedText = memorizeText}
+                            .lineLimit(nil) //this annoyingly does not work..
+                            .foregroundColor(Color.white)
+                        VStack{
+                            Text("Full text to memorize:")
+                                .foregroundColor(gold)
+                            if toggleText {
+                                Text(memorizeText)
+                            }
                         }
-                    }
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(.center)
-                }
-                //.shadow(color: .black, radius: 2)
-                //^ THIS BREAKS EVERYTHING!!!
-
-                .padding(.top, 50.0)
-                HStack{
-                    Text("% of letters to remove: 0")
-                        .lineLimit(1)
-                    Slider(value: $pctOfLetters, in: 10...80, step: 1.0)
-                        .frame(width: 150.0)
-                    Text("80")
-                }
-                Text(String(pctOfLetters) + "% to remove.")
-
-                //Buttons
-                VStack{
-                    HStack{
-                        Button(action: {
-                            self.parsedText = self.firstLetterOnly(self.memorizeText)
-                        }) {
-                            Text("Keep First Letters Only")
-                        }
-                        .frame(width: 200, height: 50, alignment: .center)
-                        .background(Color.white)
-                        .clipShape(Capsule())
-                        .overlay(Capsule().stroke(Color.black, lineWidth: 1))
+                    }
+                        //.shadow(color: .black, radius: 2)
+                        //^ THIS BREAKS EVERYTHING!!!
                         
-                        Button(action: {
-                            self.parsedText = self.removeRandomLetters(pctOfLetters: self.pctOfLetters, textToParse: self.memorizeText)
-                        }) {
-                            Text("Remove Letters")
-                        }
-                        .frame(width: 200, height: 50, alignment: .center)
-                        .background(Color.white)
-                        .clipShape(Capsule())
-                        .overlay(Capsule().stroke(Color.black, lineWidth: 1))
-                    }
-                    .padding(.top, 30.0)
-                    //.padding(.bottom, 30.0)
-                    .foregroundColor(Color.blue)
-                    
-                    //second row of buttons
+                        .padding(.top, 50.0)
                     HStack{
-                        Button(action: {
-                            self.parsedText = self.blankRandomWords(self.memorizeText, self.pctOfLetters)
-                        }) {
-                            Text("Remove Words")
+                        Text("% of letters to remove: 0")
+                            .lineLimit(1)
+                        Slider(value: $pctOfLetters, in: 10...80, step: 1.0)
+                            .frame(width: 150.0)
+                        Text("80")
+                    }
+                    Text(String(pctOfLetters) + "% to remove.")
+                    
+                    //Buttons
+                    VStack{
+                        HStack{
+                            Button(action: {
+                                self.parsedText = self.firstLetterOnly(self.memorizeText)
+                            }) {
+                                Text("Keep First Letters Only")
+                            }
+                            .buttons() //apply button style
+                            
+                            Button(action: {
+                                self.parsedText = self.removeRandomLetters(pctOfLetters: self.pctOfLetters, textToParse: self.memorizeText)
+                            }) {
+                                Text("Remove Letters")
+                            }
+                            .buttons() //apply button style
                         }
-                        .frame(width: 200, height: 50, alignment: .center)
-                        .background(Color.white)
-                        .clipShape(Capsule())
-                        .overlay(Capsule().stroke(Color.black, lineWidth: 1))
+                        .padding(.top, 30.0)
+                            //.padding(.bottom, 30.0)
+                            .foregroundColor(Color.blue)
+                        
+                        //second row of buttons
+                        HStack{
+                            Button(action: {
+                                self.parsedText = self.blankRandomWords(self.memorizeText, self.pctOfLetters)
+                            }) {
+                                Text("Remove Words")
+                            }
+                            .buttons() //apply button style
+                        }
+                            //.padding(.top, 30.0)
+                            .padding(.bottom, 30.0)
+                        
                     }
-                    //.padding(.top, 30.0)
-                    .padding(.bottom, 30.0)
-                    .foregroundColor(Color.blue)
-                    
+                    VStack{
+                        //display parsed text
+                        //                        Text("Updated text below:")
+                        //                            .fontWeight(.bold)
+                        //                        Text(parsedText)
+                        //                        Text("******************")
+                        Text("Test auto-display instead of button-driven:")
+                            .fontWeight(.bold)
+                            .padding(.top, 10.0)
+                        Text(blankRandomWords(memorizeText, pctOfLetters))
+                        //test a button that displays a word from the first string you can increment through.
+                        Button("Cycle through words"){
+                            self.spaceSplit = self.splitOnSpaces(self.memorizeText)
+                            self.wordCycle = String(self.spaceSplit[self.wordInc])
+                            if self.wordInc < self.spaceSplit.count-1 {
+                                self.wordInc += 1
+                            } else {self.wordInc = 0}
+                        }
+                        .buttons() //apply button style
+                        
+                        Text(wordCycle)
+                        Spacer()
+                        Toggle(isOn: $toggleText) {
+                            Text("Hide original text")
+                            
+                        }
+                        NavigationLink(destination: WordScrollView()){
+                            Text("Try WordScroll")
+                                .foregroundColor(Color.blue)
+                        }
+                    }
                 }
-                VStack{
-                    //display parsed text
-                    Text("Updated text below:")
-                        .fontWeight(.bold)
-                    Text(parsedText)
-                    Text("******************")
-                    Text("Test auto-display instead of button-driven:")
-                        .fontWeight(.bold)
-                        .padding(.top, 10.0)
-                    Text(blankRandomWords(memorizeText, pctOfLetters))
-                    //test a button that displays a word from the first string you can increment through.
-                    Button("Cycle through words"){
-                        self.spaceSplit = self.splitOnSpaces(self.memorizeText)
-                        self.test = String(self.spaceSplit[self.wordInc])
-                        if self.wordInc < self.spaceSplit.count-1 {
-                          self.wordInc += 1
-                        } else {self.wordInc = 0}
-                    }
-                    .frame(width: 200, height: 50, alignment: .center)
-                    .background(Color.white)
-                    .clipShape(Capsule())
-                    .overlay(Capsule().stroke(Color.black, lineWidth: 1))
-                    .foregroundColor(Color.blue)
-
-                    Text(test)
-                    Spacer()
-                    Toggle(isOn: $toggleText) {
-                        Text("Hide original text")
-                    
-                    }
-                }
+                .foregroundColor(gold)
+                //.shadow(color: .black, radius: 2)
             }
-            .foregroundColor(gold)
-            //.shadow(color: .black, radius: 2)
         }
         
     }
@@ -149,9 +160,9 @@ struct ContentView: View {
     
     
     
-    //Functions start here
+//Functions start here*******************************
     
-    //Step 1. takes a String and returns that string with blanks except first letter
+    //Step 1. takes a Word and returns that word with blanks except first letter
     func wordFirstLetterOnly (_ textToParse: String) -> String {
         let editStringArray = Array(textToParse)
         var firstLetterOnlyString = ""
@@ -209,7 +220,7 @@ struct ContentView: View {
         print(textToParse)
         //make array to loop through words
         var textToParseArray = splitOnSpaces(textToParse)
-
+        
         //final return value
         var parsedString = ""
         //how many words to blank out based on % input and words in string provided
@@ -229,7 +240,7 @@ struct ContentView: View {
             if String((textToParseArray[removalIndex]).filter {$0 == blankChar}).count == String((textToParseArray[removalIndex])).count { //word is already blanked, continue
                 continue
             }
-            //if word isn't blank, blank it out
+                //if word isn't blank, blank it out
             else {
                 //for each character in string at random index in array, create a "-" char in new string. *Need to replace "-" with blankChar in app!
                 for _ in textToParseArray[removalIndex] {
@@ -248,13 +259,6 @@ struct ContentView: View {
             parsedString += textToParseArray[i] + " "
         }
         return parsedString
-    }
-    
-    
-    //***********Formatting functions**********
-    func font(_ font: Font?) -> some View
-    {
-        foregroundColor(gold)
     }
 }
 

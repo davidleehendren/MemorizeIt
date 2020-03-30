@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B3749522242AE46A005E41B2 /* WordScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3749521242AE46A005E41B2 /* WordScrollView.swift */; };
 		B3A63E03241B9748008DC5E5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A63E02241B9748008DC5E5 /* AppDelegate.swift */; };
 		B3A63E05241B9748008DC5E5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A63E04241B9748008DC5E5 /* SceneDelegate.swift */; };
 		B3A63E07241B9748008DC5E5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A63E06241B9748008DC5E5 /* ContentView.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B3749521242AE46A005E41B2 /* WordScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordScrollView.swift; sourceTree = "<group>"; };
 		B3A63DFF241B9748008DC5E5 /* MemorizeIt.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MemorizeIt.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B3A63E02241B9748008DC5E5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B3A63E04241B9748008DC5E5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				B3A63E02241B9748008DC5E5 /* AppDelegate.swift */,
+				B3749521242AE46A005E41B2 /* WordScrollView.swift */,
 				B3A63E04241B9748008DC5E5 /* SceneDelegate.swift */,
 				B3A63E06241B9748008DC5E5 /* ContentView.swift */,
 				B3A63E08241B9750008DC5E5 /* Assets.xcassets */,
@@ -147,6 +150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B3A63E03241B9748008DC5E5 /* AppDelegate.swift in Sources */,
+				B3749522242AE46A005E41B2 /* WordScrollView.swift in Sources */,
 				B3A63E05241B9748008DC5E5 /* SceneDelegate.swift in Sources */,
 				B3A63E07241B9748008DC5E5 /* ContentView.swift in Sources */,
 			);
