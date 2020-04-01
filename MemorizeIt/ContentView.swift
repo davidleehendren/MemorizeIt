@@ -144,7 +144,7 @@ struct ContentView: View {
                             Text("Hide original text")
                             
                         }
-                        NavigationLink(destination: WordScrollView()){
+                        NavigationLink(destination: WordScrollView(memorizeText: memorizeText)){
                             Text("Try WordScroll")
                                 .foregroundColor(Color.blue)
                         }
